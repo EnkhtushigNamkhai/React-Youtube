@@ -7,17 +7,37 @@ class App extends React.Component {
       selectedVideo: window.exampleVideoData[0]
     };
   }
+
+  componentDidMount() {
+    this.search('dog');
+  }
+
+  search(query) {
+    //searchYoutube calls this
+    var onHandleSearch = function(newData) {
+      this.setState({
+        videoList: newData,
+        selectedVideo: newData[0]
+      });
+    };
+
+    this.props.searchYouTube( { 'key': window.YOUTUBE_API_KEY, 'query': query, 'max': 5}, onHandleSearch.bind(this));
+  }
+
   onVideoSelected(video) {
     this.setState({
       selectedVideo: video
     });
   }
+  
+  
+
   render() {
     return (
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div><Search /></div>
+            <div><Search onSearch = {this.search.bind(this)}/></div>
           </div>
         </nav>
         <div className="row">
